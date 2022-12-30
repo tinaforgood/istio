@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: api-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway # use istio default ingress gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - api.dementia-ai.com
+    - www.dementia-ai.com
+    - t.dementia-ai.com
+    - dolphin.dementia-ai.com
+    tls:
+      httpsRedirect: true # http redirect https
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - api.dementia-ai.com
+    - www.dementia-ai.com
+    - t.dementia-ai.com
+    - dolphin.dementia-ai.com
+    - dolphin-prod/* # only bind namespace/host
+    tls:
+      mode: SIMPLE
+      credentialName: ingress-cert.dolphin.dementia.com

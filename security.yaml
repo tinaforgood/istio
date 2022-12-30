@@ -1,0 +1,35 @@
+# https://istio.io/latest/zh/docs/tasks/security/authorization/authz-ingress/
+# kubectl patch svc istio-ingressgateway -n istio-system -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ingress-policy
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - api.13gxs.izhaohu.com
+  - from:
+    - source:
+        ipBlocks:
+        - 124.135.61.114
+        - 192.168.11.0/24
+        - 127.0.0.1
+    to:
+    - operation:
+        hosts:
+        - 13gxs.izhaohu.com
+        - www.13gxs.izhaohu.com
+  - to:
+    - operation:
+        hosts:
+        - 13gxs.izhaohu.com
+        - www.13gxs.izhaohu.com
+        paths:
+        - "/h5/isleep-qd/*"
